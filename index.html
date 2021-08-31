@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+     <!-- ESTILOS CSS -->
+    <style>
+        html, body{
+            margin: 0,
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="draw" width="800" height="800"></canvas>
+
+    <script>
+
+        const canvas = document.querySelector('#draw');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ctx.strokeStyle = '#BADA55';
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.lineWidth = 100;
+
+        // Estoy dibujando
+        let isDrawing = false;
+        // Coordenada donde empiezo a dibujar en X y Y
+        let lastX = 0;
+        let lastY = 0;
+        let hue = 0;
+
+        function draw(e){
+            // Detiene la function de ejecutarse cuando el mouse se clickea (down)
+            if (!isDrawing) return;
+
+            console.log(e);
+
+            ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            // offsetX y offsetY son valores del evento que puedes ver con console.log(e)
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+
+            // Para que no dibuje una linea vertical y sea conforme el mouse
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+            hue++;
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        });
+
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseout', () => isDrawing = false);
+
+    </script>
+
+   
+
+</body>
+</html>
